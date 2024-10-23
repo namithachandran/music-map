@@ -10,9 +10,10 @@ import backgroundImage from './assets/pexels.jpg';
 function App() {
   const [bands, setBands] = useState([]);
   const [city, setCity] = useState("");
+  const [searchInput, setSearchInput] = useState(""); 
   const [loading, setLoading] = useState(false);
   const [locationError, setLocationError] = useState("");
- 
+
   useEffect(() => {
     getUserLocation();
   }, []);
@@ -56,9 +57,10 @@ function App() {
   };
 
   const handleCitySearch = () => {
-    if (city) {
+    if (searchInput) {
       setLoading(true); 
-      handleFetchBands(city); 
+      setCity(searchInput);
+      handleFetchBands(searchInput); 
     }
   };
 
@@ -68,13 +70,15 @@ function App() {
       <h2>Search Your Music Bands</h2>
       {locationError && <p className="error">{locationError}</p>}
 
-      <Search city={city} setCity={setCity} handleCitySearch={handleCitySearch} />
+      {/* Pass searchInput */}
+      <Search city={searchInput} setCity={setSearchInput} handleCitySearch={handleCitySearch} />
 
       {loading ? (
         <Loader />
       ) : (
         <>
-          <h2>Bands Found in {city}</h2>
+          {/* Display bands only after the city is set after search */}
+          {city && <h2>Bands Found in {city}</h2>}
           <BandList bands={bands} city={city} />
         </>
       )}
@@ -83,4 +87,3 @@ function App() {
 }
 
 export default App;
-
